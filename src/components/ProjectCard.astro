@@ -1,0 +1,156 @@
+---
+import type { Project } from '../lib/types';
+
+interface Props {
+  project: Project;
+}
+const { project } = Astro.props;
+---
+
+<article class="card">
+  <div class="card-body">
+    <div class="card-head">
+      <h3 class="card-title">{project.title}</h3>
+      {project.featured && <span class="badge">Featured</span>}
+    </div>
+    <p class="card-desc">{project.description || 'No description provided.'}</p>
+    {
+      project.topics.length > 0 && (
+        <ul class="card-topics">
+          {project.topics.slice(0, 4).map((t) => (
+            <li>{t}</li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+
+  <div class="card-foot">
+    <div class="card-meta">
+      {
+        project.language && (
+          <span class="lang">
+            <span class="dot" aria-hidden="true" />
+            {project.language}
+          </span>
+        )
+      }
+      {project.stars > 0 && <span class="stars">★ {project.stars}</span>}
+    </div>
+    <div class="card-links">
+      <a href={project.url} target="_blank" rel="noopener noreferrer" aria-label={`${project.title} source code on GitHub`}>
+        Code
+      </a>
+      {
+        project.demoUrl && (
+          <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" aria-label={`${project.title} live demo`}>
+            Demo
+          </a>
+        )
+      }
+    </div>
+  </div>
+</article>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--space-4);
+    height: 100%;
+    padding: var(--space-5);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: transform var(--transition), border-color var(--transition),
+      box-shadow var(--transition);
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+    box-shadow: var(--shadow);
+  }
+
+  .card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+
+  .card-title {
+    font-size: 1.15rem;
+  }
+
+  .badge {
+    flex-shrink: 0;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+  }
+
+  .card-desc {
+    color: var(--muted);
+    font-size: 0.98rem;
+  }
+
+  .card-topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+
+  .card-topics li {
+    font-size: 0.75rem;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.1rem 0.55rem;
+  }
+
+  .card-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border);
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .lang {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .dot {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .card-links {
+    display: flex;
+    gap: var(--space-4);
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+</style>

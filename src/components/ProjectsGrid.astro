@@ -1,0 +1,50 @@
+---
+import { getProjects } from '../lib/projects';
+import { GITHUB_USERNAME } from '../lib/github';
+import ProjectCard from './ProjectCard.astro';
+
+// Build-time data fetch (live GitHub API, with committed fallback).
+const projects = await getProjects();
+const profileUrl = `https://github.com/${GITHUB_USERNAME}`;
+---
+
+<section id="projects" class="section">
+  <div class="container reveal">
+    <h2 class="section-title">Projects</h2>
+
+    {
+      projects.length === 0 ? (
+        <p class="empty">Projects couldn’t be loaded right now — please check back shortly.</p>
+      ) : (
+        <div class="grid">
+          {projects.map((p) => (
+            <ProjectCard project={p} />
+          ))}
+        </div>
+      )
+    }
+
+    <p class="more">
+      <a href={profileUrl} target="_blank" rel="noopener noreferrer">
+        See all repositories on GitHub →
+      </a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+    gap: var(--space-5);
+  }
+
+  .empty {
+    color: var(--muted);
+  }
+
+  .more {
+    margin-top: var(--space-6);
+    font-weight: 600;
+  }
+</style>

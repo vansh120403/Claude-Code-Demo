@@ -1,0 +1,81 @@
+---
+// Accessible dark/light toggle.
+// The no-FOUC script in BaseLayout sets the initial theme before paint; this
+// component only handles user clicks and persistence to localStorage.
+---
+
+<button
+  id="theme-toggle"
+  class="theme-toggle"
+  type="button"
+  aria-label="Toggle color theme"
+  aria-pressed="false"
+  title="Toggle light / dark theme"
+>
+  <!-- Shown in dark mode (click -> light) -->
+  <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+  </svg>
+  <!-- Shown in light mode (click -> dark) -->
+  <svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+  </svg>
+</button>
+
+<script>
+  const btn = document.getElementById('theme-toggle');
+
+  function reflectState() {
+    const isLight = document.documentElement.dataset.theme === 'light';
+    btn?.setAttribute('aria-pressed', String(isLight));
+  }
+
+  reflectState();
+
+  btn?.addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+    document.documentElement.dataset.theme = next;
+    try {
+      localStorage.setItem('theme', next);
+    } catch {
+      /* storage unavailable (private mode) — theme still applies for this session */
+    }
+    reflectState();
+  });
+</script>
+
+<style>
+  .theme-toggle {
+    display: inline-grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    transition: background var(--transition), border-color var(--transition),
+      color var(--transition);
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .icon {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+
+  /* Show exactly one icon depending on the active theme. */
+  :global(:root[data-theme='light']) .icon-sun {
+    display: none;
+  }
+  :global(:root:not([data-theme='light'])) .icon-moon {
+    display: none;
+  }
+</style>
