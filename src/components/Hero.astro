@@ -1,0 +1,65 @@
+---
+import { site } from '../data/site';
+import SocialLinks from './SocialLinks.astro';
+---
+
+<section id="top" class="hero">
+  <div class="container hero-inner reveal">
+    <p class="eyebrow">{site.role}</p>
+    <h1 class="hero-title">{site.name}</h1>
+    <p class="hero-tagline">{site.tagline}</p>
+
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#projects">View Projects</a>
+      <a class="btn btn-ghost" href="#contact">Get in touch</a>
+      {
+        site.resumeUrl && (
+          <a class="btn btn-ghost" href={site.resumeUrl} target="_blank" rel="noopener noreferrer">
+            Résumé
+          </a>
+        )
+      }
+    </div>
+
+    <SocialLinks class="hero-socials" />
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: clamp(var(--space-8), 12vh, var(--space-9));
+    background:
+      radial-gradient(60rem 30rem at 80% -10%, color-mix(in srgb, var(--accent) 18%, transparent), transparent),
+      var(--bg);
+  }
+
+  .hero-inner {
+    max-width: 48rem;
+  }
+
+  .eyebrow {
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    margin-bottom: var(--space-3);
+  }
+
+  .hero-title {
+    font-size: clamp(2.4rem, 1.5rem + 4.5vw, 4.2rem);
+    margin-bottom: var(--space-4);
+  }
+
+  .hero-tagline {
+    font-size: clamp(1.05rem, 1rem + 0.5vw, 1.3rem);
+    color: var(--muted);
+    margin-bottom: var(--space-6);
+    max-width: 38rem;
+  }
+
+  .hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+</style>

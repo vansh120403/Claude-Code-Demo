@@ -1,0 +1,33 @@
+---
+import { site } from '../data/site';
+---
+
+<section id="about" class="section">
+  <div class="container about reveal">
+    <h2 class="section-title">About</h2>
+    <p class="about-bio">{site.bio}</p>
+    <p class="about-meta">
+      <span aria-hidden="true">📍</span>
+      {site.location}
+    </p>
+  </div>
+</section>
+
+<style>
+  .about {
+    max-width: 52rem;
+  }
+
+  .about-bio {
+    font-size: 1.1rem;
+    color: var(--text);
+  }
+
+  .about-meta {
+    margin-top: var(--space-5);
+    color: var(--muted);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+</style>

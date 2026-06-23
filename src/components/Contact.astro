@@ -1,0 +1,142 @@
+---
+import { site } from '../data/site';
+import SocialLinks from './SocialLinks.astro';
+---
+
+<section id="contact" class="section contact-section">
+  <div class="container reveal contact-inner">
+    <h2 class="section-title">Get in touch</h2>
+    <p class="contact-lead">
+      Have an opportunity, a question, or just want to say hi? Drop a message.
+    </p>
+
+    {/* Phase 1: no backend. The form is progressively enhanced into a mailto:
+        compose by the script below. In Phase 2 only the submit handler changes
+        (POST to /api/contact) — these fields and markup stay identical. */}
+    <form id="contact-form" class="contact-form" data-email={site.email} novalidate>
+      <div class="field">
+        <label for="cf-name">Name</label>
+        <input id="cf-name" name="name" type="text" required autocomplete="name" />
+      </div>
+      <div class="field">
+        <label for="cf-email">Email</label>
+        <input id="cf-email" name="email" type="email" required autocomplete="email" />
+      </div>
+      <div class="field">
+        <label for="cf-message">Message</label>
+        <textarea id="cf-message" name="message" rows="5" required></textarea>
+      </div>
+      <button class="btn btn-primary" type="submit">Send message</button>
+      <p class="form-note" id="cf-note" role="status" aria-live="polite"></p>
+    </form>
+
+    <p class="contact-alt">
+      Prefer email directly? <a href={`mailto:${site.email}`}>{site.email}</a>
+    </p>
+
+    <SocialLinks class="contact-socials" />
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const note = document.getElementById('cf-note');
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const name = String(data.get('name') ?? '').trim();
+    const email = String(data.get('email') ?? '').trim();
+    const message = String(data.get('message') ?? '').trim();
+
+    if (!name || !email || !message) {
+      if (note) note.textContent = 'Please fill in your name, email, and a message.';
+      return;
+    }
+
+    // ---- PHASE 1: open the visitor's email client, prefilled. ----
+    // PHASE 2 replaces this block with:
+    //   await fetch('/api/contact', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify({ name, email, message }),
+    //   });
+    const to = form.dataset.email ?? '';
+    const subject = encodeURIComponent(`Portfolio message from ${name}`);
+    const body = encodeURIComponent(`${message}\n\n— ${name} (${email})`);
+    window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+    if (note) note.textContent = 'Opening your email app…';
+  });
+</script>
+
+<style>
+  .contact-section {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+  }
+
+  .contact-inner {
+    max-width: 42rem;
+  }
+
+  .contact-lead {
+    color: var(--muted);
+    margin-bottom: var(--space-6);
+  }
+
+  .contact-form {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .field {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    padding: 0.7rem 0.85rem;
+    font: inherit;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    transition: border-color var(--transition);
+  }
+
+  input:focus,
+  textarea:focus {
+    border-color: var(--accent);
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  .contact-form button {
+    justify-self: start;
+  }
+
+  .form-note {
+    min-height: 1.25rem;
+    color: var(--accent);
+    font-size: 0.9rem;
+  }
+
+  .contact-alt {
+    margin-top: var(--space-5);
+    color: var(--muted);
+  }
+
+  .contact-socials {
+    margin-top: var(--space-5);
+  }
+</style>

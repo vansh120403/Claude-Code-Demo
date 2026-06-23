@@ -1,0 +1,191 @@
+---
+import { site } from '../data/site';
+import ThemeToggle from './ThemeToggle.astro';
+
+const links = [
+  { href: '#about', label: 'About' },
+  { href: '#skills', label: 'Skills' },
+  { href: '#experience', label: 'Experience' },
+  { href: '#projects', label: 'Projects' },
+  { href: '#contact', label: 'Contact' },
+];
+---
+
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="#top" aria-label={`${site.name} — home`}>
+      <span class="brand-mark" aria-hidden="true">V</span>
+      <span class="brand-name">{site.name}</span>
+    </a>
+
+    <nav class="nav-links" id="nav-links" aria-label="Primary">
+      <ul>
+        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="nav-actions">
+      <ThemeToggle />
+      <button
+        class="nav-toggle"
+        id="nav-toggle"
+        type="button"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+        aria-controls="nav-links"
+      >
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const menu = document.getElementById('nav-links');
+
+  function setOpen(open: boolean) {
+    toggle?.setAttribute('aria-expanded', String(open));
+    menu?.classList.toggle('is-open', open);
+  }
+
+  toggle?.addEventListener('click', () => {
+    setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+  });
+
+  // Close the mobile menu after choosing a destination.
+  menu?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => setOpen(false)),
+  );
+
+  // Close on Escape for keyboard users.
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setOpen(false);
+  });
+</script>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--bg) 85%, transparent);
+    backdrop-filter: saturate(160%) blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    height: 4rem;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  .brand-mark {
+    display: inline-grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+    color: var(--accent-contrast);
+    font-weight: 800;
+  }
+
+  .nav-links ul {
+    display: flex;
+    gap: var(--space-5);
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    font-weight: 500;
+    transition: color var(--transition);
+  }
+
+  .nav-links a:hover {
+    color: var(--text);
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0 0.6rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+
+  .nav-toggle .bar {
+    height: 2px;
+    width: 100%;
+    background: var(--text);
+    border-radius: 2px;
+  }
+
+  /* Mobile */
+  @media (max-width: 720px) {
+    .nav-toggle {
+      display: flex;
+    }
+
+    .nav-links {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 4rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height var(--transition);
+    }
+
+    .nav-links.is-open {
+      max-height: 22rem;
+    }
+
+    .nav-links ul {
+      flex-direction: column;
+      gap: 0;
+      padding: var(--space-3) var(--space-5);
+    }
+
+    .nav-links li {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-links li:last-child {
+      border-bottom: 0;
+    }
+
+    .nav-links a {
+      display: block;
+      padding: var(--space-3) 0;
+      color: var(--text);
+    }
+  }
+</style>
