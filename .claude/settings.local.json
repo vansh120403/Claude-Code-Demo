@@ -1,0 +1,49 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(update-config)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "PowerShell(Get-ChildItem -Recurse -File src, decisions | Select-Object -ExpandProperty FullName | ForEach-Object { $_.Replace\\(\"$PWD\\\\\", \"\"\\) })",
+      "PowerShell($v = \\(claude --version\\) 2>&1; Write-Output \"claude: $v\"; $d = \\(docker --version\\) 2>&1; Write-Output \"docker: $d\")",
+      "PowerShell(claude mcp *)",
+      "mcp__github__create_repository",
+      "mcp__github__push_files"
+    ],
+    "ask": [
+      "PowerShell(mkdir *)",
+      "PowerShell(md *)",
+      "PowerShell(New-Item *)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \".claude/hooks/review-changed-file.ps1\"",
+            "timeout": 300,
+            "statusMessage": "Reviewing changed file with code-reviewer agent",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "FileChanged": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \".claude/hooks/review-changed-file.ps1\"",
+            "timeout": 300,
+            "statusMessage": "Reviewing changed file with code-reviewer agent",
+            "async": true
+          }
+        ]
+      }
+    ]
+  }
+}
