@@ -1,0 +1,61 @@
+/*
+ * Design tokens. Dark is the default theme (:root); light overrides apply when
+ * the <html> element has data-theme="light" (set by the no-FOUC script in
+ * BaseLayout and toggled by ThemeToggle). All colors meet WCAG AA against their
+ * intended backgrounds.
+ */
+
+:root {
+  /* color — dark (default) */
+  --bg: #0b0f17;
+  --surface: #131926;
+  --surface-2: #1b2333;
+  --text: #e6e9ef;
+  --muted: #9aa4b2;
+  --border: #232b3a;
+  --accent: #818cf8;
+  --accent-strong: #a5b4fc;
+  --accent-contrast: #0b0f17;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+  --ring: 0 0 0 3px rgba(129, 140, 248, 0.45);
+
+  /* typography */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono",
+    monospace;
+
+  /* spacing scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+
+  /* radii + layout */
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 18px;
+  --maxw: 1100px;
+
+  /* motion */
+  --transition: 180ms ease;
+}
+
+:root[data-theme="light"] {
+  --bg: #ffffff;
+  --surface: #f7f8fa;
+  --surface-2: #eef1f5;
+  --text: #0f1622;
+  --muted: #55607a;
+  --border: #e2e6ee;
+  --accent: #4f46e5;
+  --accent-strong: #4338ca;
+  --accent-contrast: #ffffff;
+  --shadow: 0 1px 2px rgba(16, 22, 34, 0.06), 0 10px 30px rgba(16, 22, 34, 0.08);
+  --ring: 0 0 0 3px rgba(79, 70, 229, 0.35);
+}
