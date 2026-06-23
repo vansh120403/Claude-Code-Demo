@@ -1,0 +1,34 @@
+---
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = site.seo.title, description = site.seo.description } = Astro.props;
+
+// Absolute URLs when a host is configured (site.url / astro.config `site`),
+// else fall back to root-relative paths.
+const base = site.url || undefined;
+const canonical = base ? new URL(Astro.url.pathname, base).href : undefined;
+const ogImage = base ? new URL('/og-image.svg', base).href : '/og-image.svg';
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="author" content={site.name} />
+{canonical && <link rel="canonical" href={canonical} />}
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+{canonical && <meta property="og:url" content={canonical} />}
+<meta property="og:image" content={ogImage} />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />

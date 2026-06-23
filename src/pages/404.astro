@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found — Vansh Mittal">
+  <section class="section">
+    <div class="container notfound">
+      <h1>404</h1>
+      <p>That page doesn’t exist.</p>
+      <a class="btn btn-primary" href="/">Back home</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .notfound {
+    text-align: center;
+    padding-block: var(--space-8);
+  }
+
+  .notfound h1 {
+    font-size: clamp(3rem, 2rem + 6vw, 6rem);
+    color: var(--accent);
+  }
+
+  .notfound p {
+    color: var(--muted);
+    margin-block: var(--space-4) var(--space-6);
+  }
+</style>

@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Skills from '../components/Skills.astro';
+import Experience from '../components/Experience.astro';
+import ProjectsGrid from '../components/ProjectsGrid.astro';
+import Contact from '../components/Contact.astro';
+---
+
+<BaseLayout>
+  <Hero />
+  <About />
+  <Skills />
+  <Experience />
+  <ProjectsGrid />
+  <Contact />
+</BaseLayout>
+
+<script>
+  // Reveal-on-scroll. Reduced-motion users and no-JS users get content shown
+  // immediately (the hidden state is CSS-gated on html.js + motion preference).
+  const els = document.querySelectorAll('.reveal');
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (prefersReduced || !('IntersectionObserver' in window)) {
+    els.forEach((el) => el.classList.add('is-visible'));
+  } else {
+    const io = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
+    );
+    els.forEach((el) => io.observe(el));
+  }
+</script>

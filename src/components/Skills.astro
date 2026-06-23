@@ -1,0 +1,65 @@
+---
+import { skills } from '../data/skills';
+---
+
+<section id="skills" class="section skills-section">
+  <div class="container reveal">
+    <h2 class="section-title">Skills</h2>
+    <div class="skill-groups">
+      {
+        skills.map((group) => (
+          <div class="skill-group">
+            <h3 class="skill-category">{group.category}</h3>
+            <ul class="chips">
+              {group.items.map((item) => (
+                <li class="chip">{item}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .skills-section {
+    background: var(--surface);
+    border-block: 1px solid var(--border);
+  }
+
+  .skill-groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: var(--space-6);
+  }
+
+  .skill-category {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin-bottom: var(--space-4);
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .chip {
+    padding: 0.4rem 0.85rem;
+    border-radius: 999px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 0.92rem;
+    transition: border-color var(--transition), color var(--transition);
+  }
+
+  .chip:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+</style>

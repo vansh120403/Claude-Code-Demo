@@ -1,0 +1,55 @@
+---
+import '../styles/tokens.css';
+import '../styles/global.css';
+import SEO from '../components/SEO.astro';
+import Nav from '../components/Nav.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#0b0f17" />
+
+    <SEO title={title} description={description} />
+
+    {/* No-FOUC theme: MUST be is:inline so it runs before first paint. */}
+    <script is:inline>
+      (() => {
+        // Mark JS as available so CSS only hides .reveal content when it can be revealed.
+        document.documentElement.classList.add('js');
+        try {
+          const stored = localStorage.getItem('theme');
+          const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+          document.documentElement.dataset.theme = stored ?? (prefersLight ? 'light' : 'dark');
+        } catch {
+          document.documentElement.dataset.theme = 'dark';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Nav />
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <p>© {year} {site.name}. Built with Astro.</p>
+      </div>
+    </footer>
+  </body>
+</html>
